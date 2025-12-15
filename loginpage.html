@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login Page</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: #001f3f;
+        overflow: hidden;
+        font-family: Arial, sans-serif;
+        position: relative;
+        height: 100vh;
+      }
+
+      .snow {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 1;
+      }
+
+      .effects-layer {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 1;
+      }
+
+      .login-container {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        z-index: 100;
+        background-color: rgba(0, 31, 63, 0.8);
+        padding: 40px;
+        border-radius: 10px;
+      }
+
+      .login-container input {
+        display: block;
+        margin: 10px auto;
+        padding: 12px;
+        width: 280px;
+        border: none;
+        border-radius: 5px;
+        background-color: white;
+        color: black;
+        outline: none;
+        font-size: 14px;
+      }
+
+      .login-container input::placeholder {
+        color: #888;
+      }
+
+      .login-container button {
+        display: block;
+        margin: 10px auto;
+        padding: 12px;
+        width: 280px;
+        border: none;
+        border-radius: 5px;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        font-weight: bold;
+      }
+
+      #loginBtn {
+        background-color: #28a745;
+      }
+
+      #loginBtn:hover {
+        background-color: #218838;
+      }
+
+      #googleBtn {
+        background-color: #4285f4;
+      }
+
+      #googleBtn:hover {
+        background-color: #357ae8;
+      }
+
+      .footer {
+        position: fixed;
+        bottom: 10px;
+        width: 100%;
+        text-align: center;
+        color: white;
+        font-size: 14px;
+        z-index: 100;
+      }
+
+      .rgb-light {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        animation: blink 1.5s infinite;
+      }
+
+      @keyframes blink {
+        0%,
+        100% {
+          opacity: 0;
+        }
+        50% {
+          opacity: 1;
+        }
+      }
+
+      .santa {
+        position: fixed;
+        top: 10px;
+        right: 10px;
+        width: 230px;
+        z-index: 50;
+      }
+
+      .snowflake {
+        position: absolute;
+        width: 5px;
+        height: 5px;
+        background-color: white;
+        border-radius: 50%;
+        animation: full-screen-fall linear infinite;
+      }
+
+      @keyframes full-screen-fall {
+        0% {
+          transform: translateY(0);
+        }
+        100% {
+          transform: translateY(100vh);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="snow" id="snow"></div>
+    <div class="effects-layer" id="effects"></div>
+
+    <div class="login-container">
+      <input type="text" id="username" placeholder="Username/Email" />
+      <input type="password" id="password" placeholder="Password" />
+      <button id="loginBtn">Login</button>
+      <button id="googleBtn">Continue with Google</button>
+    </div>
+
+    <div class="footer">Made by Melih Gerez</div>
+
+    <img
+      class="santa"
+      src="https://lh3.googleusercontent.com/sitesv/AAzXCkfUbPb0eVMGVXPFQQomDFhRkjhvQX697SX0vGGGmSkcY8xHeFq_pQfxC6F5rXe5xQrLlIfVBwFjokchDJwfVAjx4h0sGSYwYCce14HTd8IpjOkvYqW6kHBi-b6caI0vHSt_BTSeii4j2AWZCmh21-LT7kfFtbCcqDWIe1eiS6UkQf_fXKFABPp9lgY=w1280"
+      alt="Santa"
+    />
+
+    <script>
+      // Snowfall effect
+      const snowContainer = document.getElementById("snow");
+      for (let i = 0; i < 400; i++) {
+        const snowflake = document.createElement("div");
+        snowflake.classList.add("snowflake");
+        snowflake.style.left = `${Math.random() * 100}vw`;
+
+        // Start some snowflakes at random heights for immediate coverage
+        const startPosition = Math.random() * 150 - 50; // -50vh to 100vh
+        snowflake.style.top = `${startPosition}vh`;
+
+        const duration = Math.random() * 5 + 5;
+        snowflake.style.animationDuration = `${duration}s`;
+
+        // Stagger the start times so snow falls continuously
+        snowflake.style.animationDelay = `-${Math.random() * duration}s`;
+
+        snowflake.style.opacity = Math.random();
+        snowContainer.appendChild(snowflake);
+      }
+
+      // RGB lights
+      const effectsLayer = document.getElementById("effects");
+      for (let i = 0; i < 50; i++) {
+        const light = document.createElement("div");
+        light.classList.add("rgb-light");
+        light.style.top = `${Math.random() * 100}vh`;
+        light.style.left = `${Math.random() * 100}vw`;
+        light.style.backgroundColor = `rgb(${Math.floor(
+          Math.random() * 255
+        )}, ${Math.floor(Math.random() * 255)}, ${Math.floor(
+          Math.random() * 255
+        )})`;
+        light.style.animationDuration = `${Math.random() * 2 + 1}s`;
+        effectsLayer.appendChild(light);
+      }
+
+      // Login functionality
+      document.getElementById("loginBtn").addEventListener("click", () => {
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+
+        if (username && password) {
+          alert(`Welcome, ${username}!`);
+        } else {
+          alert("Please enter both username and password.");
+        }
+      });
+
+      // Google button functionality
+      document.getElementById("googleBtn").addEventListener("click", () => {
+        alert("Google login would be implemented here!");
+      });
+    </script>
+  </body>
+</html>
