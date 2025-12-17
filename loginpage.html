@@ -4,6 +4,15 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login Page</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <!-- Ensure compatibility with Chrome -->
+
     <style>
       body {
         margin: 0;
@@ -13,6 +22,19 @@
         font-family: Arial, sans-serif;
         position: relative;
         height: 100vh;
+        -webkit-overflow-scrolling: touch; /* Smooth scrolling for iOS */
+        -webkit-text-size-adjust: 100%; /* Prevent font scaling in iOS */
+      }
+
+      /* Chrome-specific fixes */
+      body {
+        overflow: auto; /* Ensure scrolling works properly */
+      }
+
+      .login-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
       }
 
       .snow {
@@ -23,6 +45,12 @@
         height: 100%;
         pointer-events: none;
         z-index: 1;
+        -webkit-transform: translate3d(
+          0,
+          0,
+          0
+        ); /* GPU acceleration for smoother animations */
+        transform: translate3d(0, 0, 0);
       }
 
       .effects-layer {
@@ -36,28 +64,47 @@
       }
 
       .login-container {
+        width: 90%; /* Adjusted for smaller screens */
+        max-width: 280px; /* Maintain a maximum width */
+        padding: 25px;
         position: fixed;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
         text-align: center;
         z-index: 100;
-        background-color: rgba(0, 31, 63, 0.8);
-        padding: 40px;
-        border-radius: 10px;
+        background-color: rgba(0, 31, 63, 0.9);
+        border-radius: 12px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        -webkit-box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        -moz-box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        animation: fadeScaleIn 0.2s ease-out; /* Shortened animation duration */
       }
 
-      .login-container input {
-        display: block;
-        margin: 10px auto;
-        padding: 12px;
-        width: 280px;
+      @keyframes fadeScaleIn {
+        0% {
+          opacity: 0;
+          transform: translate(-50%, -50%) scale(0.8);
+        }
+        100% {
+          opacity: 1;
+          transform: translate(-50%, -50%) scale(1);
+        }
+      }
+
+      /* Ensure both username and password fields have equal dimensions */
+      .login-container input,
+      .password-wrapper input {
+        width: 100%;
+        padding: 10px;
         border: none;
         border-radius: 5px;
         background-color: white;
         color: black;
         outline: none;
-        font-size: 14px;
+        font-size: 13px;
+        box-sizing: border-box;
       }
 
       .login-container input::placeholder {
@@ -67,12 +114,12 @@
       .login-container button {
         display: block;
         margin: 10px auto;
-        padding: 12px;
-        width: 280px;
+        padding: 9px;
+        width: 100px;
         border: none;
         border-radius: 5px;
         color: white;
-        font-size: 16px;
+        font-size: 14px;
         cursor: pointer;
         font-weight: bold;
       }
@@ -85,22 +132,14 @@
         background-color: #218838;
       }
 
-      #googleBtn {
-        background-color: #4285f4;
-      }
-
-      #googleBtn:hover {
-        background-color: #357ae8;
-      }
-
       .footer {
-        position: fixed;
-        bottom: 10px;
-        width: 100%;
+        margin-top: 15px;
+        padding-top: 12px;
+        border-top: 1px solid rgba(255, 255, 255, 0.3);
         text-align: center;
         color: white;
-        font-size: 14px;
-        z-index: 100;
+        font-size: 12px;
+        font-weight: 500;
       }
 
       .rgb-light {
@@ -136,6 +175,8 @@
         background-color: white;
         border-radius: 50%;
         animation: full-screen-fall linear infinite;
+        -webkit-animation: full-screen-fall linear infinite; /* iOS compatibility */
+        will-change: transform; /* Optimize animations for Chrome */
       }
 
       @keyframes full-screen-fall {
@@ -146,6 +187,89 @@
           transform: translateY(100vh);
         }
       }
+
+      @-webkit-keyframes full-screen-fall {
+        0% {
+          -webkit-transform: translateY(0);
+        }
+        100% {
+          -webkit-transform: translateY(100vh);
+        }
+      }
+      .password-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+        width: 100%;
+        margin: 10px auto;
+      }
+
+      .password-wrapper input {
+        width: 100%;
+        padding: 10px;
+        padding-right: 35px;
+        margin: 0;
+        border: none;
+        border-radius: 5px;
+        background-color: white;
+        color: black;
+        outline: none;
+        font-size: 13px;
+        box-sizing: border-box;
+      }
+
+      .toggle-password {
+        position: absolute;
+        right: 15px; /* Adjusted from 10px to 15px to move it further right */
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 18px;
+        padding: 5px;
+        width: auto;
+        margin: 0;
+        color: #666;
+        display: none;
+        pointer-events: auto;
+      }
+
+      .toggle-password:hover {
+        color: #333;
+      }
+
+      .forgot-password {
+        display: block;
+        margin: 15px auto 5px;
+        color: #4285f4;
+        text-decoration: none;
+        font-size: 13px;
+        cursor: pointer;
+      }
+
+      .forgot-password:hover {
+        text-decoration: underline;
+      }
+      .password-wrapper input:not(:placeholder-shown) ~ .toggle-password {
+        display: block;
+      }
+      .toggle-password:hover {
+        color: #333;
+      }
+
+      /* Add platform-specific adjustments */
+      input,
+      button {
+        -webkit-appearance: none; /* Remove default styles in iOS */
+        -moz-appearance: none;
+        appearance: none;
+      }
+
+      /* Ensure buttons and inputs are touch-friendly */
+      button {
+        touch-action: manipulation;
+      }
     </style>
   </head>
   <body>
@@ -153,17 +277,17 @@
     <div class="effects-layer" id="effects"></div>
 
     <div class="login-container">
-      <input type="text" id="username" placeholder="Username/Email" />
-      <input type="password" id="password" placeholder="Password" />
+      <input type="text" id="username" placeholder="Username" />
+      <div class="password-wrapper">
+        <input type="password" id="password" placeholder="Password" />
+      </div>
       <button id="loginBtn">Login</button>
-      <button id="googleBtn">Continue with Google</button>
+      <div class="footer">Made by Melih Gerez</div>
     </div>
-
-    <div class="footer">Made by Melih Gerez</div>
 
     <img
       class="santa"
-      src="https://lh3.googleusercontent.com/sitesv/AAzXCkfUbPb0eVMGVXPFQQomDFhRkjhvQX697SX0vGGGmSkcY8xHeFq_pQfxC6F5rXe5xQrLlIfVBwFjokchDJwfVAjx4h0sGSYwYCce14HTd8IpjOkvYqW6kHBi-b6caI0vHSt_BTSeii4j2AWZCmh21-LT7kfFtbCcqDWIe1eiS6UkQf_fXKFABPp9lgY=w1280"
+      src="https://raw.githubusercontent.com/melihgerez/santaimg/a85ae87c5061414a273ce0b08c5d547922398cb8/santa.png"
       alt="Santa"
     />
 
@@ -205,6 +329,16 @@
         effectsLayer.appendChild(light);
       }
 
+      // Ensure smooth scrolling for both platforms
+      document.addEventListener("touchstart", () => {}, { passive: true });
+
+      // Add platform-specific behaviors if needed
+      const isIOS =
+        /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+      if (isIOS) {
+        document.body.style.cursor = "pointer"; // Fix for iOS hover issues
+      }
+
       // Login functionality
       document.getElementById("loginBtn").addEventListener("click", () => {
         const username = document.getElementById("username").value;
@@ -215,11 +349,6 @@
         } else {
           alert("Please enter both username and password.");
         }
-      });
-
-      // Google button functionality
-      document.getElementById("googleBtn").addEventListener("click", () => {
-        alert("Google login would be implemented here!");
       });
     </script>
   </body>
